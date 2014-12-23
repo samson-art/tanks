@@ -35,9 +35,7 @@ public class Controller
     }
 
     private void beginGame() {
-        if (responce.hasNextLine()) {
-            setTanks();
-        }
+        setTanks();
         form = new MainForm(this);
 
     }

@@ -46,9 +46,7 @@ public class ClientTest extends Thread{
     @Override
     public void run() {
         while (true) {
-            if (sc.hasNextLine()) {
-                System.out.println(sc.nextLine());
-            }
+            continue;
         }
     }
 

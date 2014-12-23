@@ -29,6 +29,15 @@ public class Controller
             ClientTest client = new ClientTest();
             request = client.getOut();
             responce = client.getSc();
+            new Runnable() {
+                @Override
+                public void run() {
+                    Scanner console = new Scanner(System.in);
+                    while (console.hasNextLine()) {
+                        request.println(console.nextLine());
+                    }
+                }
+            };
             beginGame();
         } catch (IOException e) {
             e.printStackTrace();
@@ -36,8 +45,8 @@ public class Controller
     }
 
     private void beginGame() {
-        setTanks();
         form = new MainForm(this);
+        setTanks();
     }
 
     private void setTanks() {

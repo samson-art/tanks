@@ -41,16 +41,18 @@ public class Controller
     }
 
     private void setTanks() {
-        if ("1".equals(responce.nextLine())) {
-            System.out.println("Your id: 1");
-            sprites.add(new Tank(-100, 0, (double) 0));
-            sprites.add(new Tank(100, 0, (double) 0));
-        } else if ("2".equals(responce.nextLine())) {
-            System.out.println("Your id: 2");
-            sprites.add(new Tank(-100, 0, (double) 0));
-            sprites.add(new Tank(100, 0, (double) 0));
-        } else {
-            System.err.println("Неверный ответ сервера");
+        if (responce.hasNextLine()) {
+            if ("1".equals(responce.nextLine())) {
+                System.out.println("Your id: 1");
+                sprites.add(new Tank(-100, 0, (double) 0));
+                sprites.add(new Tank(100, 0, (double) 0));
+            } else if ("2".equals(responce.nextLine())) {
+                System.out.println("Your id: 2");
+                sprites.add(new Tank(-100, 0, (double) 0));
+                sprites.add(new Tank(100, 0, (double) 0));
+            } else {
+                System.err.println("Неверный ответ сервера");
+            }
         }
     }
 

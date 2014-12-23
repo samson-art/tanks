@@ -12,20 +12,13 @@ import java.util.Scanner;
  *
  * @author aleksejtitorenko
  */
-public class ClientTest extends Thread{
+public class ClientTest {
     private Socket sock;
     private BufferedReader in;
     private PrintWriter out;
     private Scanner sc;
 
     public ClientTest() throws IOException {
-
-        start();
-      
-    }
-
-    @Override
-    public void run() {
         System.out.println("Making client");
         try {
             sock = new Socket("localhost", 4444);
@@ -41,8 +34,7 @@ public class ClientTest extends Thread{
         catch (IOException e) {
             try {
                 sock.close();
-            }
-            catch (IOException e2) {
+            } catch (IOException e2) {
                 System.err.println("Socket not closed");
             }
         }

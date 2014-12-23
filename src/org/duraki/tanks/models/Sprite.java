@@ -15,7 +15,7 @@ public class Sprite {
     private Integer y;
 
     public Integer getX() {
-        return x;
+        return x+DISPLAY_WIDTH/2;
     }
 
     public void setX(Integer x) {
@@ -23,7 +23,7 @@ public class Sprite {
     }
 
     public Integer getY() {
-        return y;
+        return y+DISPLAY_HEIGHT;
     }
 
     public void setY(Integer y) {

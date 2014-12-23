@@ -7,7 +7,6 @@ import org.duraki.tanks.network.ClientTest;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.graphics.Image;
-
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -37,15 +36,10 @@ public class Controller
 
     private void beginGame() {
         if (responce.hasNextLine()) {
-            System.out.println(responce.nextLine());
-        }
-        if (responce.hasNextLine()) {
             setTanks();
         }
         form = new MainForm(this);
-        while (true) {
-            break;
-        }
+
     }
 
     private void setTanks() {

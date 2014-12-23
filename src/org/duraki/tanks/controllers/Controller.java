@@ -15,6 +15,7 @@ import java.util.Scanner;
 /**
  * Created by artemsamsonov on 22.12.14.
  */
+
 public class Controller
         implements PaintListener, org.eclipse.swt.events.KeyListener {
 
@@ -37,7 +38,6 @@ public class Controller
     private void beginGame() {
         setTanks();
         form = new MainForm(this);
-
     }
 
     private void setTanks() {
@@ -55,9 +55,7 @@ public class Controller
     }
 
     public static void main(String[] argv) {
-
         new Controller();
-
     }
 
     @Override

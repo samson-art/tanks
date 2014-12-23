@@ -20,6 +20,12 @@ public class ClientTest extends Thread{
 
     public ClientTest() throws IOException {
 
+        start();
+      
+    }
+
+    @Override
+    public void run() {
         System.out.println("Making client");
         try {
             sock = new Socket("localhost", 4444);
@@ -31,7 +37,6 @@ public class ClientTest extends Thread{
             in = new BufferedReader(new InputStreamReader(sock.getInputStream()));
             out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(sock.getOutputStream())), true);
             sc = new Scanner(in);
-            start();
         }
         catch (IOException e) {
             try {
@@ -40,13 +45,6 @@ public class ClientTest extends Thread{
             catch (IOException e2) {
                 System.err.println("Socket not closed");
             }
-        }
-      
-    }
-    @Override
-    public void run() {
-        while (true) {
-            continue;
         }
     }
 

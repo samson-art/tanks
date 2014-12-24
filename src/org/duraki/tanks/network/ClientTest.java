@@ -12,11 +12,10 @@ import java.util.Scanner;
  *
  * @author aleksejtitorenko
  */
-public class ClientTest {
+public class ClientTest extends Thread {
     private Socket sock;
     private BufferedReader in;
     private PrintWriter out;
-    private Scanner sc;
 
     public ClientTest() throws IOException {
         System.out.println("Making client");
@@ -29,7 +28,6 @@ public class ClientTest {
         try {
             in = new BufferedReader(new InputStreamReader(sock.getInputStream()));
             out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(sock.getOutputStream())), true);
-            sc = new Scanner(in);
         }
         catch (IOException e) {
             try {
@@ -40,12 +38,20 @@ public class ClientTest {
         }
     }
 
-    public Scanner getSc() {
-        return sc;
+    @Override
+    public synchronized void run() {
+
+    }
+
+    public Socket getSock() {
+        return sock;
+    }
+
+    public BufferedReader getIn() {
+        return in;
     }
 
     public PrintWriter getOut() {
         return out;
     }
-
 }

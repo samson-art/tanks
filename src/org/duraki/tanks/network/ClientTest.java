@@ -20,7 +20,7 @@ public class ClientTest extends Thread {
     public ClientTest() throws IOException {
         System.out.println("Making client");
         try {
-            sock = new Socket("localhost", 4444);
+            sock = new Socket("localhost", 4242);
         }
         catch (IOException e) {
             System.err.println("Socket failed");

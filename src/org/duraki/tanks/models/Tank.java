@@ -9,11 +9,10 @@ public class Tank  extends Sprite{
 
     private Double  ang;
 
-    private final static Double speed = (double) 10;
+    private final static Double speed = (double) 5;
 
     private Integer lifePoints = 100;
     private Boolean alive = true;
-    private Image img;
 
     public Tank(Integer x, Integer y, Double ang) {
         setX(x);
@@ -44,10 +43,6 @@ public class Tank  extends Sprite{
         this.alive = alive;
     }
 
-    public void setImg(Image img) {
-        this.img = img;
-    }
-
     public Integer getLifePoints() {
         return lifePoints;
     }
@@ -56,7 +51,15 @@ public class Tank  extends Sprite{
         return alive;
     }
 
-    public Image getImg() {
-        return img;
+    public Double getAng() {
+        return ang;
+    }
+
+    public void setAng(Double ang) {
+        this.ang = ang;
+    }
+
+    public static Double getSpeed() {
+        return speed;
     }
 }

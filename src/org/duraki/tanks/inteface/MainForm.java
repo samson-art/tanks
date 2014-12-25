@@ -14,25 +14,27 @@ import static org.eclipse.swt.widgets.Display.getDefault;
  */
 public class MainForm {
 
-    final private Display display = new Display();
-    final private Shell shell = new Shell(display);
-    Canvas canvas = new Canvas(shell, SWT.NATIVE);
-
-    public MainForm() {
-        shell.setSize(800, 600);
-        shell.setLayout(new FillLayout());
-        shell.open();
-    }
-
-    public Shell getShell() {
-        return shell;
-    }
-
-    public Canvas getCanvas() {
-        return canvas;
-    }
-
-    public Display getDisplay() {
-        return display;
-    }
+//
+//
+//    public MainForm() {
+//        shell.setSize(800, 600);
+//        shell.setLayout(new FillLayout());
+//        shell.open();
+//    }
+//
+//    public static void main(String [] args) {
+//        new MainForm();
+//    }
+//
+//    public Shell getShell() {
+//        return shell;
+//    }
+//
+//    public Canvas getCanvas() {
+//        return canvas;
+//    }
+//
+//    public Display getDisplay() {
+//        return display;
+//    }
 }

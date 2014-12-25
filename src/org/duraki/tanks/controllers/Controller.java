@@ -1,16 +1,18 @@
 package org.duraki.tanks.controllers;
 
-import org.duraki.tanks.inteface.MainForm;
 import org.duraki.tanks.models.Sprite;
 import org.duraki.tanks.models.Tank;
 import org.duraki.tanks.network.ClientTest;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Shell;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -23,35 +25,17 @@ import java.util.ArrayList;
 
 public class Controller {
 
+    final static private Display display = new Display();
+    final private Shell shell = new Shell(display);
+    Canvas canvas = new Canvas(shell, SWT.NATIVE);
+
+    private static Image tankImg = new Image(display, "img/tank.png");
+
     private ClientTest client;
-    private MainForm form = new MainForm();
-    private Display display = form.getDisplay();
-    private Canvas canvas = form.getCanvas();
     private ArrayList<Sprite> sprites = new ArrayList<Sprite>();
+    private Sprite myTank;
     private BufferedReader responce;
     private PrintWriter request;
-    private static Boolean formCreated = false;
-    private static Boolean clientCreated = false;
-
-    private Thread loopTh = new Thread() {
-        @Override
-        public void run() {
-            display.getDefault().asyncExec(new Runnable() {
-                @Override
-                public void run() {
-                    formCreated = true;
-                    System.out.println("draw");
-                    while (!display.isDisposed()) {
-                        canvas.redraw();
-                        if (display.readAndDispatch())
-                            display.sleep();
-                    }
-                    display.dispose();
-                }
-            });
-        }
-    };
-
 
     public Controller() throws InterruptedException {
         System.out.println("Создание клиента...");
@@ -60,14 +44,29 @@ public class Controller {
         } catch (IOException e1) {
             e1.printStackTrace();
         }
-        System.out.println("Клиент создан...");
         request = client.getOut();
         responce = client.getIn();
+        System.out.println("Клиент создан...");
         System.out.println("Создание формы");
-        form.getShell().addKeyListener(new KeyListener() {
+        shell.setSize(1000, 1000);
+        shell.setLayout(new FillLayout());
+        shell.open();
+        canvas.addPaintListener(new PaintListener() {
+            @Override
+            public void paintControl(PaintEvent paintEvent) {
+                for (Sprite i : sprites) {
+                    paintEvent.gc.drawImage(tankImg, i.getX(), i.getY());
+                }
+            }
+        });
+        canvas.addKeyListener(new KeyListener() {
             @Override
             public void keyPressed(KeyEvent keyEvent) {
-
+                if (keyEvent.keyCode == SWT.ARROW_LEFT) {
+                    myTank.setX((int) (myTank.getX()-Tank.getSpeed()));
+                } else if (keyEvent.keyCode == SWT.ARROW_RIGHT) {
+                    myTank.setX((int) (myTank.getX()+Tank.getSpeed()));
+                }
             }
 
             @Override
@@ -75,51 +74,50 @@ public class Controller {
 
             }
         });
-        form.getCanvas().addPaintListener(new PaintListener() {
-            @Override
-            public void paintControl(PaintEvent paintEvent) {
-                //TODO
-                Image tankImg = new Image(form.getDisplay(), "img/tank.png");
-                for (Sprite i : sprites) {
-                    paintEvent.gc.drawImage(tankImg, 0, 0);
-                }
-            }
-        });
-        loopTh.start();
         System.out.println("Форма создана");
         System.out.println("Начинаю игру...");
-        while (!formCreated) {
-            Thread.sleep(100);
-        }
-        while (true) {
-            try {
-                String ans = responce.readLine();
-                System.out.println("Server: " + ans);
-                if ("END".equals(responce)) {
-                    break;
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (true) {
+                    try {
+                        String ans = responce.readLine();
+                        System.out.println("Server: " + ans);
+                        if ("END".equals(responce)) {
+                            break;
+                        }
+                        if ("1".equals(ans) || "2".equals(ans)) {
+                            setTanks(ans);
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
-                if ("1".equals(ans) || "2".equals(ans)) {
-                    setTanks(ans);
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
+            }
+        }, "Client thread").start();
+        while (!shell.isDisposed()) {
+            System.out.println("Draw");
+            canvas.redraw();
+            // read the next OS event queue and transfer it to a SWT event
+            if (!display.readAndDispatch()) {
+                // if there are currently no other OS event to process
+                // sleep until the next OS event is available
+                display.sleep();
             }
         }
     }
 
-//    private static void beginGame() throws IOException, InterruptedException {
-//
-//    }
     private void setTanks(String s) {
         if ("1".equals(s)) {
             System.out.println("Your id: 1");
-            sprites.add(new Tank(-100, 0, (double) 0));
-            sprites.add(new Tank(100, 0, (double) 0));
+            sprites.add(new Tank(-100, 100, (double) 0));
+            sprites.add(new Tank(100, 100, (double) 0));
         } else if ("2".equals(s)) {
             System.out.println("Your id: 2");
-            sprites.add(new Tank(-100, 0, (double) 0));
-            sprites.add(new Tank(100, 0, (double) 0));
+            sprites.add(new Tank(100, 100, (double) 0));
+            sprites.add(new Tank(-100, 100, (double) 0));
         }
+        myTank = sprites.get(0);
         System.out.println("Сигнал получен...\nИгра начинается...");
     }
 

@@ -32,6 +32,7 @@ public class Controller {
     final static public Canvas canvas = new Canvas(shell, SWT.NATIVE);
 
     private static Image tankImg = new Image(display, "img/tank.png");
+    private static Image tankRight = new Image(display, "img/tank1.png");
     private static Image weaponImg = new Image(display, "img/weapon.png");
     private ClientTest client;
     private ArrayList<Sprite> sprites = new ArrayList<Sprite>();
@@ -58,9 +59,19 @@ public class Controller {
         canvas.addPaintListener(new PaintListener() {
             @Override
             public void paintControl(PaintEvent paintEvent) {
-                for (int i = 0; i < sprites.size(); i++) {
-                    paintEvent.gc.drawImage((sprites.get(i) instanceof Tank) ? tankImg : weaponImg, sprites.get(i).getX().intValue(), sprites.get(i).getY());
-                    if (!sprites.get(i).getLife()) sprites.remove(i);
+                if (sprites.size() > 0) {
+                    if (myTank.getAng() > Math.toRadians(90)) {
+                        paintEvent.gc.drawImage(tankRight, myTank.getX().intValue(), myTank.getY());
+                        paintEvent.gc.drawImage(tankImg , sprites.get(1).getX().intValue(), sprites.get(1).getY());
+                    } else {
+                        paintEvent.gc.drawImage(tankImg, myTank.getX().intValue(), myTank.getY());
+                        paintEvent.gc.drawImage(tankRight , sprites.get(1).getX().intValue(), sprites.get(1).getY());
+                    }
+                } else if (sprites.size() > 2) {
+                    for (int i = 2; i < sprites.size(); i++) {
+                        paintEvent.gc.drawImage(weaponImg, sprites.get(i).getX().intValue(), sprites.get(i).getY());
+                        if (!sprites.get(i).getLife()) sprites.remove(i);
+                    }
                 }
             }
         });
@@ -103,36 +114,36 @@ public class Controller {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                while (true) {
-                    try {
-                        String ans = responce.readLine();
-                        System.out.println("Server: " + ans);
-                        if ("FIRE".equals(ans)) {
-                            sprites.add(((Tank) sprites.get(1)).fire(true));
-                        }
-                        if ("MOVE".equals(ans)) {
-                            String[] a = responce.readLine().split("#");
-                            sprites.get(1).setX(Double.parseDouble(a[0]));
-                            sprites.get(1).setAng(Double.parseDouble(a[1]));
-                        }
-                        if ("1".equals(ans) || "2".equals(ans)) {
-                            setTanks(ans);
-                        }
-                        if ("LOOSE".equals(ans) || "WIN".equals(ans)) {
-                            System.out.println(ans);
-                            inGame = false;
-                            finish();
-                            break;
-                        }
-                    } catch (IOException e) {
-                        e.printStackTrace();
+            while (true) {
+                try {
+                    String ans = responce.readLine();
+                    System.out.println("Server: " + ans);
+                    if ("FIRE".equals(ans)) {
+                        sprites.add(((Tank) sprites.get(1)).fire(true));
                     }
-                    try {
-                        Thread.sleep(10);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
+                    if ("MOVE".equals(ans)) {
+                        String[] a = responce.readLine().split("#");
+                        sprites.get(1).setX(Double.parseDouble(a[0]));
+                        sprites.get(1).setAng(Double.parseDouble(a[1]));
                     }
+                    if ("1".equals(ans) || "2".equals(ans)) {
+                        setTanks(ans);
+                    }
+                    if ("LOOSE".equals(ans) || "WIN".equals(ans)) {
+                        System.out.println(ans);
+                        inGame = false;
+                        finish();
+                        break;
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
+                try {
+                    Thread.sleep(10);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
             }
         }, "Client thread").start();
         while (!shell.isDisposed()) {

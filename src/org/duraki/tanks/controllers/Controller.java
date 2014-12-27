@@ -28,15 +28,16 @@ import java.util.ArrayList;
 
 public class Controller {
 
-    private final static Integer DIMENSION = 45;
-    private final static Display display = new Display();
-    private final static Shell shell = new Shell(display);
-    private final static Canvas canvas = new Canvas(shell, SWT.NATIVE);
+    private Display display = new Display();
+    private Shell shell = new Shell(display);
+    private Canvas canvas = new Canvas(shell, SWT.NATIVE);
 
+    private final static Integer DIMENSION = 45;
     private final Image tankImg = new Image(display, "img/tank.png");
     private final Image weaponImg = new Image(display, "img/weapon.png");
     private final Image backgrondImg = new Image(display, "img/background.png");
     private final Image boomImg = new Image(display, "img/boom.png");
+
     private ClientTest client;
     private ArrayList<Sprite> sprites = new ArrayList<Sprite>();
     private Sprite myTank;
@@ -46,20 +47,63 @@ public class Controller {
     private Boolean inGame = false;
 
     public Controller() throws InterruptedException {
-        System.out.println("Создание клиента...");
-        try {
-            client = new ClientTest();
-        } catch (IOException e1) {
-            e1.printStackTrace();
+        createClient();
+        setWindow();
+        setListeners();
+        System.out.println("Форма создана");
+        System.out.println("Жду сигнала к началу игры...");
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+            while (true) {
+                try {
+                    String ans = responce.readLine();
+                    System.out.println("Server: " + ans);
+                    if ("FIRE".equals(ans)) {
+                        sprites.add(((Tank) sprites.get(1)).fire(true));
+                    }
+                    if ("MOVE".equals(ans)) {
+                        String[] a = responce.readLine().split("#");
+                        sprites.get(1).setX(Double.parseDouble(a[0]));
+                        sprites.get(1).setAng(Double.parseDouble(a[1]));
+                    }
+                    if ("1".equals(ans) || "2".equals(ans)) {
+                        setTanks(ans);
+                    }
+                    if ("LOOSE".equals(ans) || "WIN".equals(ans)) {
+                        if ("WIN".equals(ans)) sprites.get(1).setLife(false);
+                        JOptionPane.showMessageDialog(null, ans);
+                        inGame = false;
+                        finish();
+                        break;
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    Thread.sleep(10);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+            }
+        }, "Client thread").start();
+        while (!shell.isDisposed()) {
+            Double t0 = (double) System.nanoTime();
+            //System.out.println("Draw");
+            if (inGame) canvas.redraw();
+            checkCol();
+            if (!display.readAndDispatch()) {
+                // if there are currently no other OS event to process
+                // sleep until the next OS event is available
+                display.sleep();
+            }
+            Thread.sleep(10);
+            dt = (System.nanoTime() - t0) / 1000000000;
         }
-        request = client.getOut();
-        responce = client.getIn();
-        System.out.println("Клиент создан...");
-        System.out.println("Создание формы");
-        shell.setSize(Sprite.DISPLAY_WIDTH, Sprite.DISPLAY_HEIGHT);
-        shell.setBackgroundImage(backgrondImg);
-        shell.setLayout(new FillLayout());
-        shell.open();
+    }
+
+    private void setListeners() {
         canvas.addPaintListener(new PaintListener() {
             @Override
             public void paintControl(PaintEvent paintEvent) {
@@ -122,68 +166,36 @@ public class Controller {
 
             }
         });
+    }
 
+    private void setWindow() {
+        System.out.println("Создание формы");
+        shell.setSize(Sprite.DISPLAY_WIDTH, Sprite.DISPLAY_HEIGHT);
+        shell.setBackgroundImage(backgrondImg);
+        shell.setLayout(new FillLayout());
+        shell.open();
+    }
 
-        System.out.println("Форма создана");
-        System.out.println("Начинаю игру...");
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-            while (true) {
-                try {
-                    String ans = responce.readLine();
-                    System.out.println("Server: " + ans);
-                    if ("FIRE".equals(ans)) {
-                        sprites.add(((Tank) sprites.get(1)).fire(true));
-                    }
-                    if ("MOVE".equals(ans)) {
-                        String[] a = responce.readLine().split("#");
-                        sprites.get(1).setX(Double.parseDouble(a[0]));
-                        sprites.get(1).setAng(Double.parseDouble(a[1]));
-                    }
-                    if ("1".equals(ans) || "2".equals(ans)) {
-                        setTanks(ans);
-                    }
-                    if ("LOOSE".equals(ans) || "WIN".equals(ans)) {
-                        JOptionPane.showMessageDialog(null, ans);
-                        inGame = false;
-                        finish();
-                        break;
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                try {
-                    Thread.sleep(10);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-            }
-        }, "Client thread").start();
-        while (!shell.isDisposed()) {
-            Double t0 = (double) System.nanoTime();
-            //System.out.println("Draw");
-            if (inGame) canvas.redraw();
-            checkCol();
-            if (!display.readAndDispatch()) {
-                // if there are currently no other OS event to process
-                // sleep until the next OS event is available
-                display.sleep();
-            }
-            Thread.sleep(10);
-            dt = (System.nanoTime() - t0) / 1000000000;
+    private void createClient() {
+        System.out.println("Создание клиента...");
+        try {
+            client = new ClientTest();
+        } catch (IOException e1) {
+            e1.printStackTrace();
         }
+        request = client.getOut();
+        responce = client.getIn();
+        System.out.println("Клиент создан...");
     }
 
     private void finish() {
         try {
+            shell.dispose();
+            display.dispose();
             client.getSock().close();
-            request.flush();
-            request.close();
-            request.flush();
-            responce.close();
+            new Controller();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }

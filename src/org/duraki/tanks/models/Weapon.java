@@ -25,11 +25,11 @@ public class Weapon extends Sprite implements Runnable {
     public void run() {
         float t = 0;
         Double sx, yx;
-        x = (getX() + 70 + 58 * (this.cos).intValue());
+        x = (getX() + 70 + 58 * (this.cos).intValue()/10);
         y = (getY() + 42 - 63 * (this.sin).intValue());
         while(life) {
             sx = WEAPONSPEED * this.cos * t;
-            yx = WEAPONSPEED * this.sin * t + GRAVITY * t * t / 2;
+            yx = -WEAPONSPEED * this.sin * t + GRAVITY * t * t / 2;
             setX(getX() + sx);
             setY(getY() + yx.intValue());
             try {

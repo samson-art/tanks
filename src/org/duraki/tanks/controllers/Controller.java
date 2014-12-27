@@ -76,6 +76,14 @@ public class Controller {
                     myTank.moveRight(dt);
                     sendX();
                 }
+                if (keyEvent.keyCode == SWT.ARROW_UP) {
+                    myTank.moveUp(dt);
+                    sendX();
+                }
+                if (keyEvent.keyCode == SWT.ARROW_DOWN) {
+                    myTank.moveDown(dt);
+                    sendX();
+                }
                 if (keyEvent.keyCode == SWT.SPACE) {
                     sprites.add(((Tank)myTank).fire(false));
                     request.println("FIRE");
@@ -105,6 +113,7 @@ public class Controller {
                         if ("MOVE".equals(ans)) {
                             String[] a = responce.readLine().split("#");
                             sprites.get(1).setX(Double.parseDouble(a[0]));
+                            sprites.get(1).setAng(Double.parseDouble(a[1]));
                         }
                         if ("1".equals(ans) || "2".equals(ans)) {
                             setTanks(ans);
@@ -181,7 +190,7 @@ public class Controller {
 
     private void sendX() {
         request.println("MOVE");
-        request.println(myTank.getX());
+        request.println(myTank.getX()+ "#" + myTank.getAng());
     }
 
     private void setTanks(String s) {

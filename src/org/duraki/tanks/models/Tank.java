@@ -5,8 +5,6 @@ package org.duraki.tanks.models;
  */
 public class Tank  extends Sprite{
 
-    private Double  ang;
-
     private Integer lifePoints = 100;
 
     public Tank(Double x, Integer y, Double ang) {

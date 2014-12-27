@@ -20,7 +20,7 @@ public class Sprite {
     public final static Integer WALL_X = 336;
     public final static Integer WALL_Y = 385;
     public final static Integer DISPLAY_WIDTH = 800;
-    public final static Integer DISPLAY_HEIGHT = 600;
+    public final static Integer DISPLAY_HEIGHT = 800;
     public final static Integer DULO_SPEED = 100;
 
     protected Boolean life = true;
@@ -46,12 +46,24 @@ public class Sprite {
 
     public void moveLeft(Double dt) {
         Double dx = TANK_SPEED*dt;
-        setX(x-dx);
+        if (ang < Math.toRadians(90)) {
+            if ((x-dx)<0) setX((double) 0);
+            else setX(x - dx);
+        } else if (ang > Math.toRadians(90)) {
+            if ((x-dx)< WALL_X+WALL_WIDTH) setX((double) WALL_X+WALL_WIDTH);
+            else setX(x - dx);
+        }
     }
 
     public void moveRight(Double dt) {
         Double dx = TANK_SPEED*dt;
-        setX(x+dx);
+        if (ang < Math.toRadians(90)) {
+            if ((x + dx + TANK_WIDHT) > WALL_X) setX((double) (WALL_X - TANK_WIDHT));
+            else setX(x + dx);
+        } else if (ang > Math.toRadians(90)) {
+            if ((x+dx+TANK_WIDHT)>DISPLAY_WIDTH) setX((double) (DISPLAY_WIDTH - TANK_WIDHT));
+            else setX(x + dx);
+        }
     }
 
     public Boolean getLife() {

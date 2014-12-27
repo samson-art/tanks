@@ -61,6 +61,7 @@ public class Controller {
         canvas.addPaintListener(new PaintListener() {
             @Override
             public void paintControl(PaintEvent paintEvent) {
+                paintEvent.gc.drawImage(backgrondImg, 0, 0);
                 if (sprites.size() > 0) {
                     if (myTank.getAng() > Math.toRadians(90)) {
                         paintEvent.gc.drawImage(tankRight, myTank.getX().intValue(), myTank.getY());

@@ -30,6 +30,12 @@ public class Weapon extends Sprite implements Runnable {
         while(life) {
             sx = WEAPONSPEED * this.cos * t;
             yx = -WEAPONSPEED * this.sin * t + GRAVITY * t * t / 2;
+            Double x = getX()+sx;
+            Double y = getY()+yx;
+            if (y > DISPLAY_HEIGHT-BACKGROUND_HEIGHT) life = false;
+            if (x < 0 || x > DISPLAY_WIDTH) life = false;
+            if (y > (DISPLAY_HEIGHT-WALL_HEIGHT-BACKGROUND_HEIGHT) && (x + 15) > WALL_X && x < (WALL_X+WALL_WIDTH)) life = false;
+            if (x < 0 || x > DISPLAY_WIDTH) life = false;
             setX(getX() + sx);
             setY(getY() + yx.intValue());
             try {
@@ -37,10 +43,6 @@ public class Weapon extends Sprite implements Runnable {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            if (y > DISPLAY_HEIGHT-BACKGROUND_HEIGHT) life = false;
-            if (x < 0 || x > DISPLAY_WIDTH) life = false;
-            if (y < WALL_HEIGHT && x > WALL_X && x < (WALL_X+WALL_WIDTH)) life = false;
-            if (x < 0 || x > DISPLAY_WIDTH) life = false;
             t += 0.01;
             try {
                 Thread.sleep(10);

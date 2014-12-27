@@ -7,11 +7,11 @@ import org.duraki.tanks.controllers.Controller;
  */
 public class Sprite {
 
-    protected final static Double WEAPONSPEED = (double) 50;
+    protected final static Double WEAPONSPEED = (double) 70;
 
 
     private final static Double TANK_SPEED = (double) 500;
-    protected final static Double GRAVITY = (double) 250;
+    protected final static Double GRAVITY = (double) 200;
     public final static Integer BACKGROUND_HEIGHT = 15;
     public final static Integer WEAPON_WIDTH = 15;
     public final static Integer WEAPON_HEIGHT = 15;
@@ -50,13 +50,15 @@ public class Sprite {
     public void moveLeft(Double dt) {
         Double dx = TANK_SPEED*dt;
         if ((x-dx)<0) x = (double) 0;
-        if ((x-dx)<(WALL_X+WALL_WIDTH) && (x-dx) > WALL_X) x = (double) WALL_X+WALL_WIDTH;
+        else if ((x-dx)<(WALL_X+WALL_WIDTH) && (x-dx) > WALL_X) x = (double) WALL_X+WALL_WIDTH;
+        else x-=dx;
     }
 
     public void moveRight(Double dt) {
         Double dx = TANK_SPEED*dt;
         if ((x+dx+TANK_WIDHT)>DISPLAY_WIDTH) x = (double) (DISPLAY_WIDTH - TANK_WIDHT);
-        if ((x+dx+TANK_WIDHT)>WALL_X && (x+dx+TANK_WIDHT) < (WALL_X+WALL_WIDTH)) x = (double) (WALL_X - TANK_WIDHT);
+        else if ((x+dx+TANK_WIDHT)>WALL_X && (x+dx+TANK_WIDHT) < (WALL_X+WALL_WIDTH)) x = (double) (WALL_X - TANK_WIDHT);
+        else x+=dx;
     }
 
     public Boolean getLife() {

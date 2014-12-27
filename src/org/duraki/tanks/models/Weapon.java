@@ -37,9 +37,11 @@ public class Weapon extends Sprite implements Runnable {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            if (y > DISPLAY_HEIGHT) life = false;
+            if (y > DISPLAY_HEIGHT-BACKGROUND_HEIGHT) life = false;
             if (x < 0 || x > DISPLAY_WIDTH) life = false;
-            t += 0.03;
+            if (y < WALL_HEIGHT && x > WALL_X && x < (WALL_X+WALL_WIDTH)) life = false;
+            if (x < 0 || x > DISPLAY_WIDTH) life = false;
+            t += 0.01;
             try {
                 Thread.sleep(10);
             } catch (InterruptedException e) {

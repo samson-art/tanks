@@ -31,9 +31,10 @@ public class Controller {
     final static private Shell shell = new Shell(display);
     final static public Canvas canvas = new Canvas(shell, SWT.NATIVE);
 
-    private static Image tankImg = new Image(display, "img/tank.png");
-    private static Image tankRight = new Image(display, "img/tank1.png");
-    private static Image weaponImg = new Image(display, "img/weapon.png");
+    private final Image tankImg = new Image(display, "img/tank.png");
+    private final Image tankRight = new Image(display, "img/tank1.png");
+    private final Image weaponImg = new Image(display, "img/weapon.png");
+    private final Image backgrondImg = new Image(display, "img/background.png");
     private ClientTest client;
     private ArrayList<Sprite> sprites = new ArrayList<Sprite>();
     private Sprite myTank;
@@ -54,6 +55,7 @@ public class Controller {
         System.out.println("Клиент создан...");
         System.out.println("Создание формы");
         shell.setSize(Sprite.DISPLAY_WIDTH, Sprite.DISPLAY_HEIGHT);
+        shell.setBackgroundImage(backgrondImg);
         shell.setLayout(new FillLayout());
         shell.open();
         canvas.addPaintListener(new PaintListener() {
@@ -67,7 +69,8 @@ public class Controller {
                         paintEvent.gc.drawImage(tankImg, myTank.getX().intValue(), myTank.getY());
                         paintEvent.gc.drawImage(tankRight , sprites.get(1).getX().intValue(), sprites.get(1).getY());
                     }
-                } else if (sprites.size() > 2) {
+                }
+                if (sprites.size() > 2) {
                     for (int i = 2; i < sprites.size(); i++) {
                         paintEvent.gc.drawImage(weaponImg, sprites.get(i).getX().intValue(), sprites.get(i).getY());
                         if (!sprites.get(i).getLife()) sprites.remove(i);
@@ -207,12 +210,12 @@ public class Controller {
     private void setTanks(String s) {
         if ("1".equals(s)) {
             System.out.println("Your id: 1");
-            sprites.add(new Tank((double)100, 300, Math.toRadians(0)));
-            sprites.add(new Tank((double)600, 300, Math.toRadians(180)));
+            sprites.add(new Tank((double)100, Sprite.DISPLAY_HEIGHT-Sprite.TANK_HEIGHT-Sprite.BACKGROUND_HEIGHT, Math.toRadians(0)));
+            sprites.add(new Tank((double)600, Sprite.DISPLAY_HEIGHT-Sprite.TANK_HEIGHT-Sprite.BACKGROUND_HEIGHT, Math.toRadians(180)));
         } else if ("2".equals(s)) {
             System.out.println("Your id: 2");
-            sprites.add(new Tank((double)600, 300, Math.toRadians(180)));
-            sprites.add(new Tank((double)100, 300, Math.toRadians(0)));
+            sprites.add(new Tank((double)600, Sprite.DISPLAY_HEIGHT-Sprite.TANK_HEIGHT-Sprite.BACKGROUND_HEIGHT, Math.toRadians(180)));
+            sprites.add(new Tank((double)100, Sprite.DISPLAY_HEIGHT-Sprite.TANK_HEIGHT-Sprite.BACKGROUND_HEIGHT, Math.toRadians(0)));
         }
         myTank = sprites.get(0);
         System.out.println("Сигнал получен...\nИгра начинается...");

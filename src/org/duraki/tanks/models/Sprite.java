@@ -9,10 +9,16 @@ public class Sprite {
 
     protected final static Double WEAPONSPEED = (double) 100;
 
+
     private final static Double TANK_SPEED = (double) 500;
     protected final static Double GRAVITY = (double) 200;
     public final static Integer TANK_WIDHT = 128;
-    public final static Integer TANK_HEIGHT = 128;
+    public final static Integer BACKGROUND_HEIGHT = 15;
+    public final static Integer TANK_HEIGHT = 74;
+    public final static Integer WALL_WIDTH = 128;
+    public final static Integer WALL_HEIGHT = 400;
+    public final static Integer WALL_X = 336;
+    public final static Integer WALL_Y = 385;
     public final static Integer DISPLAY_WIDTH = 800;
     public final static Integer DISPLAY_HEIGHT = 600;
     public final static Integer DULO_SPEED = 100;

@@ -7,13 +7,15 @@ import org.duraki.tanks.controllers.Controller;
  */
 public class Sprite {
 
-    protected final static Double WEAPONSPEED = (double) 100;
+    protected final static Double WEAPONSPEED = (double) 80;
 
 
     private final static Double TANK_SPEED = (double) 500;
-    protected final static Double GRAVITY = (double) 200;
-    public final static Integer TANK_WIDHT = 128;
+    protected final static Double GRAVITY = (double) 250;
     public final static Integer BACKGROUND_HEIGHT = 15;
+    public final static Integer WEAPON_WIDTH = 15;
+    public final static Integer WEAPON_HEIGHT = 15;
+    public final static Integer TANK_WIDHT = 120;
     public final static Integer TANK_HEIGHT = 74;
     public final static Integer WALL_WIDTH = 128;
     public final static Integer WALL_HEIGHT = 400;
@@ -21,6 +23,7 @@ public class Sprite {
     public final static Integer WALL_Y = 385;
     public final static Integer DISPLAY_WIDTH = 800;
     public final static Integer DISPLAY_HEIGHT = 800;
+    public final static Integer DULO_LENGHT = 25;
     public final static Integer DULO_SPEED = 100;
 
     protected Boolean life = true;
@@ -75,13 +78,19 @@ public class Sprite {
     }
 
     public void moveUp(Double dt) {
-        Double a = ang < Math.toRadians(90) ? Math.toRadians(dt*DULO_SPEED) : -Math.toRadians(dt*DULO_SPEED);
-        ang+=a;
+        Double a = Math.toRadians(dt*DULO_SPEED);
+        if ((ang+a)>Math.toRadians(180)) {
+            ang = Math.toRadians(180);
+        }
+        else ang+=a;
     }
 
     public void moveDown(Double dt) {
-        Double a = ang < Math.toRadians(90) ? -Math.toRadians(dt*DULO_SPEED) : Math.toRadians(dt*DULO_SPEED);
-        ang+=a;
+        Double a = Math.toRadians(dt*DULO_SPEED);
+        if ((ang-a)<Math.toRadians(0)) {
+            ang = Math.toRadians(0);
+        }
+        else ang-=a;
     }
 
     public void setAng(Double ang) {

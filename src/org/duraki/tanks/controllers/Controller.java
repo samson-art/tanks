@@ -32,7 +32,6 @@ public class Controller {
     final static public Canvas canvas = new Canvas(shell, SWT.NATIVE);
 
     private final Image tankImg = new Image(display, "img/tank.png");
-    private final Image tankRight = new Image(display, "img/tank1.png");
     private final Image weaponImg = new Image(display, "img/weapon.png");
     private final Image backgrondImg = new Image(display, "img/background.png");
     private ClientTest client;
@@ -63,13 +62,15 @@ public class Controller {
             public void paintControl(PaintEvent paintEvent) {
                 paintEvent.gc.drawImage(backgrondImg, 0, 0);
                 if (sprites.size() > 0) {
-                    if (myTank.getAng() > Math.toRadians(90)) {
-                        paintEvent.gc.drawImage(tankRight, myTank.getX().intValue(), myTank.getY());
-                        paintEvent.gc.drawImage(tankImg , sprites.get(1).getX().intValue(), sprites.get(1).getY());
-                    } else {
-                        paintEvent.gc.drawImage(tankImg, myTank.getX().intValue(), myTank.getY());
-                        paintEvent.gc.drawImage(tankRight , sprites.get(1).getX().intValue(), sprites.get(1).getY());
-                    }
+                    paintEvent.gc.setLineWidth(5);
+                    paintEvent.gc.drawLine(((Double)(myTank.getX()+Tank.TANK_WIDHT/2)).intValue(), myTank.getY(),
+                            ((Double)(myTank.getX()+Tank.TANK_WIDHT/2+Sprite.DULO_LENGHT*Math.cos(myTank.getAng()))).intValue(), 
+                            ((Double)(myTank.getY()-Sprite.DULO_LENGHT*Math.sin(myTank.getAng()))).intValue());
+                    paintEvent.gc.drawImage(tankImg, myTank.getX().intValue(), myTank.getY());
+                    paintEvent.gc.drawLine(((Double) (sprites.get(1).getX()+Tank.TANK_WIDHT/2)).intValue(), sprites.get(1).getY(),
+                            ((Double)(sprites.get(1).getX()+Tank.TANK_WIDHT/2+Sprite.DULO_LENGHT*Math.cos(sprites.get(1).getAng()))).intValue(),
+                            ((Double)(sprites.get(1).getY()-Sprite.DULO_LENGHT*Math.sin(sprites.get(1).getAng()))).intValue());
+                    paintEvent.gc.drawImage(tankImg, sprites.get(1).getX().intValue(), sprites.get(1).getY());
                 }
                 if (sprites.size() > 2) {
                     for (int i = 2; i < sprites.size(); i++) {
@@ -191,7 +192,7 @@ public class Controller {
                     w = (Weapon) sprites.get(i);
                     if (w.getEnemy()) {
                         if (myTank.getX() < w.getX() && (myTank.getX() + Sprite.TANK_WIDHT) > w.getX()) {
-                            if (myTank.getY() < w.getY() && (myTank.getY() + Sprite.TANK_HEIGHT) > w.getY()) {
+                            if (myTank.getY() < (w.getY()+Sprite.WALL_HEIGHT)) {
                                 w.setLife(false);
                                 myTank.setLife(false);
                                 request.println("END");
@@ -211,12 +212,12 @@ public class Controller {
     private void setTanks(String s) {
         if ("1".equals(s)) {
             System.out.println("Your id: 1");
-            sprites.add(new Tank((double)100, Sprite.DISPLAY_HEIGHT-Sprite.TANK_HEIGHT-Sprite.BACKGROUND_HEIGHT, Math.toRadians(0)));
-            sprites.add(new Tank((double)600, Sprite.DISPLAY_HEIGHT-Sprite.TANK_HEIGHT-Sprite.BACKGROUND_HEIGHT, Math.toRadians(180)));
+            sprites.add(new Tank((double)100, Sprite.DISPLAY_HEIGHT-Sprite.TANK_HEIGHT-Sprite.BACKGROUND_HEIGHT, Math.toRadians(90)));
+            sprites.add(new Tank((double)600, Sprite.DISPLAY_HEIGHT-Sprite.TANK_HEIGHT-Sprite.BACKGROUND_HEIGHT, Math.toRadians(90)));
         } else if ("2".equals(s)) {
             System.out.println("Your id: 2");
-            sprites.add(new Tank((double)600, Sprite.DISPLAY_HEIGHT-Sprite.TANK_HEIGHT-Sprite.BACKGROUND_HEIGHT, Math.toRadians(180)));
-            sprites.add(new Tank((double)100, Sprite.DISPLAY_HEIGHT-Sprite.TANK_HEIGHT-Sprite.BACKGROUND_HEIGHT, Math.toRadians(0)));
+            sprites.add(new Tank((double)600, Sprite.DISPLAY_HEIGHT-Sprite.TANK_HEIGHT-Sprite.BACKGROUND_HEIGHT, Math.toRadians(90)));
+            sprites.add(new Tank((double)100, Sprite.DISPLAY_HEIGHT-Sprite.TANK_HEIGHT-Sprite.BACKGROUND_HEIGHT, Math.toRadians(90)));
         }
         myTank = sprites.get(0);
         System.out.println("Сигнал получен...\nИгра начинается...");

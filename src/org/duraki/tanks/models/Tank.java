@@ -47,7 +47,7 @@ public class Tank  extends Sprite{
 
 
     public Weapon fire(Boolean e) {
-        Weapon weapon = new Weapon(this.x, this.y, this.ang, e);
+        Weapon weapon = new Weapon(this.x+TANK_WIDHT/2+DULO_LENGHT*Math.cos(ang), ((Double)(this.y-Math.sin(ang)*DULO_LENGHT)).intValue(), this.ang, e);
         new Thread(weapon).start();
         return weapon;
     }

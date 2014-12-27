@@ -37,16 +37,11 @@ public class Weapon extends Sprite implements Runnable {
             setX(getX() + sx);
             setY(getY() + yx.intValue());
             try {
-                Thread.sleep(30);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            t += 0.01;
-            try {
                 Thread.sleep(10);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+            t += 0.01;
         }
     }
     public Integer getDamagePoints() {

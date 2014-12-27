@@ -7,7 +7,7 @@ import org.duraki.tanks.controllers.Controller;
  */
 public class Sprite {
 
-    protected final static Double WEAPONSPEED = (double) 80;
+    protected final static Double WEAPONSPEED = (double) 50;
 
 
     private final static Double TANK_SPEED = (double) 500;
@@ -49,7 +49,7 @@ public class Sprite {
 
     public void moveLeft(Double dt) {
         Double dx = TANK_SPEED*dt;
-        if (ang < Math.toRadians(90)) {
+        if (ang <= Math.toRadians(90)) {
             if ((x-dx)<0) setX((double) 0);
             else setX(x - dx);
         } else if (ang > Math.toRadians(90)) {
@@ -60,7 +60,7 @@ public class Sprite {
 
     public void moveRight(Double dt) {
         Double dx = TANK_SPEED*dt;
-        if (ang < Math.toRadians(90)) {
+        if (ang <= Math.toRadians(90)) {
             if ((x + dx + TANK_WIDHT) > WALL_X) setX((double) (WALL_X - TANK_WIDHT));
             else setX(x + dx);
         } else if (ang > Math.toRadians(90)) {

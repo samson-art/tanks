@@ -192,7 +192,7 @@ public class Controller {
                     w = (Weapon) sprites.get(i);
                     if (w.getEnemy()) {
                         if (myTank.getX() < w.getX() && (myTank.getX() + Sprite.TANK_WIDHT) > w.getX()) {
-                            if (myTank.getY() < (w.getY()+Sprite.WALL_HEIGHT)) {
+                            if (myTank.getY() < (w.getY()+Sprite.WALL_HEIGHT) && (myTank.getY() + Sprite.TANK_HEIGHT) > w.getY()) {
                                 w.setLife(false);
                                 myTank.setLife(false);
                                 request.println("END");

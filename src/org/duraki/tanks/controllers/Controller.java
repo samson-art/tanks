@@ -189,13 +189,15 @@ public class Controller {
     }
 
     private void finish() {
+        request.flush();
+        request.close();
         try {
-            shell.dispose();
-            display.dispose();
-            client.getSock().close();
-            new Controller();
-        } catch (InterruptedException e) {
+            responce.close();
+        } catch (IOException e) {
             e.printStackTrace();
+        }
+        try {
+            client.getSock().close();
         } catch (IOException e) {
             e.printStackTrace();
         }

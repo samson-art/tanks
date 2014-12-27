@@ -5,7 +5,6 @@ import org.duraki.tanks.models.Tank;
 import org.duraki.tanks.models.Weapon;
 import org.duraki.tanks.network.ClientTest;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.Bullet;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.PaintEvent;

@@ -1,14 +1,5 @@
 package org.duraki.tanks.inteface;
 
-import org.duraki.tanks.controllers.Controller;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.FillLayout;
-import org.eclipse.swt.widgets.Canvas;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Shell;
-
-import static org.eclipse.swt.widgets.Display.getDefault;
-
 /**
  * Created by artemsamsonov on 14.12.14.
  */

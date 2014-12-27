@@ -6,13 +6,12 @@ package org.duraki.tanks.network;/*
 
 import java.io.*;
 import java.net.Socket;
-import java.util.Scanner;
 
 /**
  *
  * @author aleksejtitorenko
  */
-public class ClientTest extends Thread {
+public class ClientTest {
     private Socket sock;
     private BufferedReader in;
     private PrintWriter out;
@@ -36,11 +35,6 @@ public class ClientTest extends Thread {
                 System.err.println("Socket not closed");
             }
         }
-    }
-
-    @Override
-    public synchronized void run() {
-
     }
 
     public Socket getSock() {

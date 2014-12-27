@@ -1,7 +1,5 @@
 package org.duraki.tanks.models;
-import org.duraki.tanks.controllers.Controller;
 
-import java.math.*;
 /**
  * Created by artemsamsonov on 14.12.14.
  */

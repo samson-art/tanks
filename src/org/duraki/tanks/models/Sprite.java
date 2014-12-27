@@ -49,24 +49,14 @@ public class Sprite {
 
     public void moveLeft(Double dt) {
         Double dx = TANK_SPEED*dt;
-        if (ang <= Math.toRadians(90)) {
-            if ((x-dx)<0) setX((double) 0);
-            else setX(x - dx);
-        } else if (ang > Math.toRadians(90)) {
-            if ((x-dx)< WALL_X+WALL_WIDTH) setX((double) WALL_X+WALL_WIDTH);
-            else setX(x - dx);
-        }
+        if ((x-dx)<0) x = (double) 0;
+        if ((x-dx)<(WALL_X+WALL_WIDTH) && (x-dx) > WALL_X) x = (double) WALL_X+WALL_WIDTH;
     }
 
     public void moveRight(Double dt) {
         Double dx = TANK_SPEED*dt;
-        if (ang <= Math.toRadians(90)) {
-            if ((x + dx + TANK_WIDHT) > WALL_X) setX((double) (WALL_X - TANK_WIDHT));
-            else setX(x + dx);
-        } else if (ang > Math.toRadians(90)) {
-            if ((x+dx+TANK_WIDHT)>DISPLAY_WIDTH) setX((double) (DISPLAY_WIDTH - TANK_WIDHT));
-            else setX(x + dx);
-        }
+        if ((x+dx+TANK_WIDHT)>DISPLAY_WIDTH) x = (double) (DISPLAY_WIDTH - TANK_WIDHT);
+        if ((x+dx+TANK_WIDHT)>WALL_X && (x+dx+TANK_WIDHT) < (WALL_X+WALL_WIDTH)) x = (double) (WALL_X - TANK_WIDHT);
     }
 
     public Boolean getLife() {

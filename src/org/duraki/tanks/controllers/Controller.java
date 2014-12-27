@@ -16,6 +16,7 @@ import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
+import javax.swing.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -27,13 +28,15 @@ import java.util.ArrayList;
 
 public class Controller {
 
-    final static public Display display = new Display();
-    final static private Shell shell = new Shell(display);
-    final static public Canvas canvas = new Canvas(shell, SWT.NATIVE);
+    private final static Integer DIMENSION = 45;
+    private final static Display display = new Display();
+    private final static Shell shell = new Shell(display);
+    private final static Canvas canvas = new Canvas(shell, SWT.NATIVE);
 
     private final Image tankImg = new Image(display, "img/tank.png");
     private final Image weaponImg = new Image(display, "img/weapon.png");
     private final Image backgrondImg = new Image(display, "img/background.png");
+    private final Image boomImg = new Image(display, "img/boom.png");
     private ClientTest client;
     private ArrayList<Sprite> sprites = new ArrayList<Sprite>();
     private Sprite myTank;
@@ -63,14 +66,22 @@ public class Controller {
                 paintEvent.gc.drawImage(backgrondImg, 0, 0);
                 if (sprites.size() > 0) {
                     paintEvent.gc.setLineWidth(5);
-                    paintEvent.gc.drawLine(((Double)(myTank.getX()+Tank.TANK_WIDHT/2)).intValue(), myTank.getY(),
-                            ((Double)(myTank.getX()+Tank.TANK_WIDHT/2+Sprite.DULO_LENGHT*Math.cos(myTank.getAng()))).intValue(), 
-                            ((Double)(myTank.getY()-Sprite.DULO_LENGHT*Math.sin(myTank.getAng()))).intValue());
-                    paintEvent.gc.drawImage(tankImg, myTank.getX().intValue(), myTank.getY());
-                    paintEvent.gc.drawLine(((Double) (sprites.get(1).getX()+Tank.TANK_WIDHT/2)).intValue(), sprites.get(1).getY(),
-                            ((Double)(sprites.get(1).getX()+Tank.TANK_WIDHT/2+Sprite.DULO_LENGHT*Math.cos(sprites.get(1).getAng()))).intValue(),
-                            ((Double)(sprites.get(1).getY()-Sprite.DULO_LENGHT*Math.sin(sprites.get(1).getAng()))).intValue());
-                    paintEvent.gc.drawImage(tankImg, sprites.get(1).getX().intValue(), sprites.get(1).getY());
+                    if (myTank.getLife()) {
+                        paintEvent.gc.drawLine(((Double) (myTank.getX() + Tank.TANK_WIDHT / 2)).intValue(), myTank.getY(),
+                                ((Double) (myTank.getX() + Tank.TANK_WIDHT / 2 + Sprite.DULO_LENGHT * Math.cos(myTank.getAng()))).intValue(),
+                                ((Double) (myTank.getY() - Sprite.DULO_LENGHT * Math.sin(myTank.getAng()))).intValue());
+                        paintEvent.gc.drawImage(tankImg, myTank.getX().intValue(), myTank.getY());
+                    } else {
+                        paintEvent.gc.drawImage(boomImg, myTank.getX().intValue(), myTank.getY()-DIMENSION);
+                    }
+                    if (sprites.get(1).getLife()) {
+                        paintEvent.gc.drawLine(((Double) (sprites.get(1).getX() + Tank.TANK_WIDHT / 2)).intValue(), sprites.get(1).getY(),
+                                ((Double) (sprites.get(1).getX() + Tank.TANK_WIDHT / 2 + Sprite.DULO_LENGHT * Math.cos(sprites.get(1).getAng()))).intValue(),
+                                ((Double) (sprites.get(1).getY() - Sprite.DULO_LENGHT * Math.sin(sprites.get(1).getAng()))).intValue());
+                        paintEvent.gc.drawImage(tankImg, sprites.get(1).getX().intValue(), sprites.get(1).getY());
+                    } else {
+                        paintEvent.gc.drawImage(boomImg, sprites.get(1).getX().intValue(), sprites.get(1).getY()-DIMENSION);
+                    }
                 }
                 if (sprites.size() > 2) {
                     for (int i = 2; i < sprites.size(); i++) {
@@ -135,7 +146,7 @@ public class Controller {
                         setTanks(ans);
                     }
                     if ("LOOSE".equals(ans) || "WIN".equals(ans)) {
-                        System.out.println(ans);
+                        JOptionPane.showMessageDialog(null, ans);
                         inGame = false;
                         finish();
                         break;
@@ -154,8 +165,8 @@ public class Controller {
         while (!shell.isDisposed()) {
             Double t0 = (double) System.nanoTime();
             //System.out.println("Draw");
-            checkCol();
             if (inGame) canvas.redraw();
+            checkCol();
             if (!display.readAndDispatch()) {
                 // if there are currently no other OS event to process
                 // sleep until the next OS event is available
@@ -173,12 +184,6 @@ public class Controller {
             request.close();
             request.flush();
             responce.close();
-            display.syncExec(new Runnable() {
-                @Override
-                public void run() {
-                    shell.dispose();
-                }
-            });
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -192,7 +197,7 @@ public class Controller {
                     w = (Weapon) sprites.get(i);
                     if (w.getEnemy()) {
                         if (w.getX() + Sprite.WEAPON_WIDTH > myTank.getX() && (myTank.getX() + Sprite.TANK_WIDHT) > w.getX()) {
-                            if ((w.getY()+Sprite.WEAPON_HEIGHT) > myTank.getY()){
+                            if ((w.getY()+Sprite.WEAPON_HEIGHT) > myTank.getY()) {
                                 w.setLife(false);
                                 myTank.setLife(false);
                                 request.println("END");
